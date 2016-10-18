@@ -32,14 +32,21 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+PROJECTS_APP = [
+    'core'
+]
+
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'django.contrib.gis',
+    'rest_framework'
+] + PROJECTS_APP
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,8 +84,12 @@ WSGI_APPLICATION = 'EuLevo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'eulevo_api',
+        'USER': 'eulevo_dev',
+        'PASSWORD': 'qwer4321',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -101,6 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'core.CoreUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -121,5 +134,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = LOCAL('static')
+
+# Media Files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = LOCAL('media')
+
+# Cors
+CORS_ORIGIN_ALLOW_ALL = True
+
+#Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'core.authentication.EuLevoJSONWebTokenAuthentication',
+    ),
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
