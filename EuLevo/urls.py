@@ -17,8 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
+from core.views import SocialLoginViewSet, ProfileViewSet
 
 router = routers.DefaultRouter()
+router.register('social', SocialLoginViewSet)
+router.register('profile', ProfileViewSet)
 
 
 from .site import site as el_site
