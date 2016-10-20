@@ -7,17 +7,22 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.gis.db import models
 from django.core.mail import send_mail
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.six import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from rest_framework_jwt.settings import api_settings
+from guardian.shortcuts import assign_perm
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 SOCIAL_TYPES = (
-    (1, 'facebook'),
-    (2, 'google')
+    (1, 'google'),
+    (2, 'facebook')
 )
+
+SOCIAL_TYPES_DICT = {num: value for num, value in SOCIAL_TYPES}
 
 
 def profile_directory_path(instance, filename):
@@ -172,11 +177,28 @@ class CoreUser(AbstractBaseUser, PermissionsMixin):
         data = hasattr(self, 'profile') and getattr(self, 'profile') or None
         return ProfileSerializer(data, many=False).data
 
+    def social_authenticate(self, social_type=None, key=None):
+        if self.sociallogin_set.filter(social_type=social_type).exists():
+            try:
+                social_login = self.sociallogin_set.get(social_type=social_type, key=key)
+            except:
+                return False
+        else:
+            self.sociallogin_set.create(key=key, social_type=social_type)
+        return True
+
     class Meta:
         """
         """
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+@receiver(post_save, sender=CoreUser)
+def coreuser_post_save(sender, instance, created, **kwargs):
+    from django.contrib.contenttypes.models import ContentType
+
+    for ct in ContentType.objects.filter(app_label='core'):
+        pass
 
 
 class Profile(models.Model):
@@ -184,12 +206,18 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(CoreUser)
     name = models.CharField(max_length=100)
-    cpf_cnpj = models.CharField(unique=True, max_length=15, null=True, blank=True)
+    cpf_cnpj = models.CharField(max_length=15, null=True, blank=True)
+    phone = models.CharField(max_length=15, default='0000000000')
     rating = models.FloatField(default=0)
     social_image = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to=profile_directory_path, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+@receiver(post_save, sender=Profile)
+def profile_post_save(sender, instance, created, **kwargs):
+    assign_perm('change_profile', instance.user, instance)
 
 
 class SocialLogin(models.Model):
@@ -203,6 +231,10 @@ class SocialLogin(models.Model):
         """
         """
         unique_together = ('user', 'social_type')
+
+    @property
+    def social_name(self):
+        return SOCIAL_TYPES_DICT.get(self.social_type)
 
 
 class Device(models.Model):
