@@ -18,6 +18,12 @@ jwt_get_username_from_payload = api_settings.JWT_PAYLOAD_GET_USERNAME_HANDLER
 
 
 class LoginSerializer(Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
     email = serializers.EmailField()
     password = PasswordField(write_only=True, required=False)
     social_type = serializers.IntegerField(write_only=True, required=False)
@@ -28,7 +34,11 @@ class LoginSerializer(Serializer):
             try:
                 user = authenticate(**attrs)
             except SocialUserNotFound:
-                msg = "not_exist"
+                msg = "NOT_EXIST"
+                raise AuthenticationFailed(msg)
+
+            except IntegrityError:
+                msg = "INVALID_OPTIONS"
                 raise AuthenticationFailed(msg)
 
             if user:
@@ -43,8 +53,8 @@ class LoginSerializer(Serializer):
                     'user': user
                 }
             else:
-                msg = "Credenciais erradas"
-                raise serializers.ValidationError(msg)
+                msg = "WRONG_CREDENTIALS"
+                raise AuthenticationFailed(msg)
         else:
             msg = _('Must include "{username_field}" and "password".')
             msg = msg.format(username_field=self.username_field)
@@ -52,6 +62,12 @@ class LoginSerializer(Serializer):
 
 
 class RegisterSerializer(Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
     email = serializers.EmailField()
     name = serializers.CharField(max_length=100)
     phone = serializers.CharField(max_length=15)
@@ -63,8 +79,8 @@ class RegisterSerializer(Serializer):
         main_fields = {'email', 'name', 'phone', 'password'}
 
         if not main_fields.issubset(set(attrs)):
-            msg = u"Campos obrigatórios faltando."
-            raise serializers.ValidationError(msg)
+            msg = u"FIELDS_MISSING"
+            raise AuthenticationFailed(msg)
         try:
             user = CoreUser.objects.create_user(email=attrs.get('email'), password=attrs.get('password'))
         except IntegrityError:

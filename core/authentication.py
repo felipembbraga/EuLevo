@@ -1,7 +1,4 @@
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from django.utils.translation import ugettext as _
-from rest_framework import exceptions
-from .models import CoreUser
 
 
 class EuLevoJSONWebTokenAuthentication(JSONWebTokenAuthentication):

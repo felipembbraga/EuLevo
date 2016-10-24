@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from rest_framework import mixins
-from rest_framework import status
 from rest_framework.permissions import AllowAny, DjangoObjectPermissions, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
-from core.decorators import retreive_only_owner
 from .models import CoreUser, Profile
 from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, RegisterSerializer
 

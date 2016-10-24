@@ -1,7 +1,9 @@
-from django.contrib import admin
-from EuLevo.site import register
-from .models import CoreUser, Profile, SocialLogin, Device, UserPoint
 from django import forms
+from django.contrib import admin
+
+from EuLevo.site import register
+from .models import CoreUser, Profile, UserPoint
+
 
 class ProfileInline(admin.StackedInline):
     model = Profile

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, Permission
 from django.contrib.gis.db import models
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
@@ -180,7 +180,7 @@ class CoreUser(AbstractBaseUser, PermissionsMixin):
     def social_authenticate(self, social_type=None, key=None):
         if self.sociallogin_set.filter(social_type=social_type).exists():
             try:
-                social_login = self.sociallogin_set.get(social_type=social_type, key=key)
+                self.sociallogin_set.get(social_type=social_type, key=key)
             except:
                 return False
         else:
@@ -198,7 +198,10 @@ def coreuser_post_save(sender, instance, created, **kwargs):
     from django.contrib.contenttypes.models import ContentType
 
     for ct in ContentType.objects.filter(app_label='core'):
-        pass
+        permissions = Permission.objects.filter(content_type=ct)
+        instance.user_permissions.add(*permissions)
+
+
 
 
 class Profile(models.Model):

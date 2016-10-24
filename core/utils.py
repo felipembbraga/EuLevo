@@ -18,6 +18,7 @@ def jwt_response_payload_handler(token, user=None, request=None):
 
     """
     data = {
+        'success': True,
         'token': token
     }
     try:
