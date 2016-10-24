@@ -37,6 +37,7 @@ class SocialLoginViewSet(mixins.CreateModelMixin, GenericViewSet):
         response = {'status': 'OK', 'data': serializer.data}
         return Response(response)
 
+
 # Create your views here.
 class CoreViewSet(ModelViewSet):
     queryset = CoreUser.objects.all()

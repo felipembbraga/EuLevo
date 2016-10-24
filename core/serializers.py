@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate
 from django.db.utils import IntegrityError
 from django.utils.translation import ugettext as _
@@ -100,7 +100,6 @@ class RegisterSerializer(Serializer):
         else:
             msg = "Credenciais erradas"
             raise serializers.ValidationError(msg)
-
 
 
 class UserSerializer(serializers.ModelSerializer):

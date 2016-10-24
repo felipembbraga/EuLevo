@@ -42,6 +42,7 @@ def profile_directory_path(instance, filename):
 class CoreUserManager(BaseUserManager):
     """
     """
+
     def _create_user(self, email, password, **extra_fields):
         """
         Creates and saves a User with the given email and password.
@@ -193,6 +194,7 @@ class CoreUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+
 @receiver(post_save, sender=CoreUser)
 def coreuser_post_save(sender, instance, created, **kwargs):
     from django.contrib.contenttypes.models import ContentType
@@ -200,8 +202,6 @@ def coreuser_post_save(sender, instance, created, **kwargs):
     for ct in ContentType.objects.filter(app_label='core'):
         permissions = Permission.objects.filter(content_type=ct)
         instance.user_permissions.add(*permissions)
-
-
 
 
 class Profile(models.Model):
