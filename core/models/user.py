@@ -217,7 +217,6 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
 @receiver(post_save, sender=Profile)
 def profile_post_save(sender, instance, created, **kwargs):
     assign_perm('change_profile', instance.user, instance)

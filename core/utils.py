@@ -19,7 +19,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
     """
     data = {
         'success': True,
-        'token': token
+        'token': token,
+        'email': user and user.email or None
     }
     try:
         data['profile'] = ProfileSerializer(user.profile).data
