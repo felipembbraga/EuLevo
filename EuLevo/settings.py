@@ -33,7 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 PROJECTS_APP = [
-    'core'
+    'core',
+    'eulevo'
 ]
 
 INSTALLED_APPS = [
