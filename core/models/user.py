@@ -202,6 +202,9 @@ def coreuser_post_save(sender, instance, created, **kwargs):
     for ct in ContentType.objects.filter(app_label='core'):
         permissions = Permission.objects.filter(content_type=ct)
         instance.user_permissions.add(*permissions)
+    for ct in ContentType.objects.filter(app_label='eulevo'):
+        permissions = Permission.objects.filter(content_type=ct)
+        instance.user_permissions.add(*permissions)
 
 
 class Profile(models.Model):

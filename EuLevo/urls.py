@@ -16,11 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
 
 from core.views import ProfileViewSet, SocialLoginView, RegisterView
+from eulevo.views import PackageViewSet, PackageImageViewSet, TravelViewSet
 
 router = routers.DefaultRouter()
 router.register('profiles', ProfileViewSet)
+router.register('packages', PackageViewSet)
+router.register('package-images', PackageImageViewSet)
+router.register('travels', TravelViewSet)
 
 
 from .site import site as el_site
@@ -32,4 +38,5 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', SocialLoginView.as_view()),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

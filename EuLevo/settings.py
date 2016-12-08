@@ -47,7 +47,8 @@ INSTALLED_APPS = [
                      'django.contrib.staticfiles',
                      'django.contrib.gis',
                      'guardian',
-                     'rest_framework'
+                     'rest_framework',
+                     'rest_framework_gis'
                  ] + PROJECTS_APP
 
 MIDDLEWARE = [
@@ -116,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'core.CoreUser'
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend', # default
+    'django.contrib.auth.backends.ModelBackend',  # default
     'guardian.backends.ObjectPermissionBackend',
     'core.backend.SocialLoginBackend',
 )

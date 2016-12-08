@@ -9,7 +9,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.compat import Serializer
 
 from core.exceptions import SocialUserNotFound
-from core.models import CoreUser, Profile
+from core.models import CoreUser, Profile, UserPoint
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -105,10 +105,26 @@ class RegisterSerializer(Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoreUser
-        fields = ['pk', 'email', 'jwt_token', 'full_profile']
+        fields = ['pk', 'email', 'full_profile']
+
+    def __init__(self, with_token=True, instance=None, data={}, **kwargs):
+        self.with_token = with_token
+        super(UserSerializer, self).__init__(instance, data, **kwargs)
+
+    def get_fields(self):
+        fields = super(UserSerializer, self).get_fields()
+        if self.with_token:
+            fields.append('jwt_token')
+        return fields
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['user', 'name', 'rating', 'social_image', 'image']
+        fields = ['user', 'name', 'phone', 'rating', 'social_image', 'image']
+
+
+class UserPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserPoint
+        fields = ['pk', 'point', 'updated_at']

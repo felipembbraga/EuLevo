@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.gis.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from guardian.shortcuts import assign_perm
+
 from core.models import CoreUser
 import datetime
 
@@ -37,6 +41,21 @@ class Package(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+@receiver(post_save, sender=Package)
+def package_post_save(sender, instance, created, **kwargs):
+
+    assign_perm('change_package', instance.owner, instance)
+
+
 class PackageImage(models.Model):
     package = models.ForeignKey(Package)
     image = models.ImageField(upload_to=package_image_directory_path)
+
+
+
+
+@receiver(post_save, sender=PackageImage)
+def packageimage_post_save(sender, instance, created, **kwargs):
+    assign_perm('change_packageimage', instance.package.owner, instance)
+
