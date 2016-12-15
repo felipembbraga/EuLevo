@@ -178,6 +178,12 @@ class CoreUser(AbstractBaseUser, PermissionsMixin):
         data = hasattr(self, 'profile') and getattr(self, 'profile') or None
         return ProfileSerializer(data, many=False).data
 
+    @property
+    def point(self):
+        from core.serializers import UserPointSerializer
+        data = hasattr(self, 'userpoint') and getattr(self, 'userpoint') or None
+        return UserPointSerializer(data, many=False, hide_user=True).data
+
     def social_authenticate(self, social_type=None, key=None):
         if self.sociallogin_set.filter(social_type=social_type).exists():
             try:
@@ -203,7 +209,7 @@ def coreuser_post_save(sender, instance, created, **kwargs):
         permissions = Permission.objects.filter(content_type=ct)
         instance.user_permissions.add(*permissions)
     for ct in ContentType.objects.filter(app_label='eulevo'):
-        permissions = Permission.objects.filter(content_type=ct)
+        permissions = Permission.objects.filter(content_type=ct, codename__startswith='add')
         instance.user_permissions.add(*permissions)
 
 
@@ -264,3 +270,8 @@ class UserPoint(models.Model):
 
         """
         return '{0},{1}'.format(self.point.get_y(), self.point.get_x())
+
+
+@receiver(post_save, sender=UserPoint)
+def userpoint_post_save(sender, instance, created, **kwargs):
+    assign_perm('change_userpoint', instance.user, instance)

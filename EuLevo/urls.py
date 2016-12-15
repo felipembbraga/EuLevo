@@ -19,15 +19,18 @@ from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 
-from core.views import ProfileViewSet, SocialLoginView, RegisterView
-from eulevo.views import PackageViewSet, PackageImageViewSet, TravelViewSet
+from core.views import ProfileViewSet, SocialLoginView, RegisterView, UserPointViewSet
+from eulevo.views import PackageViewSet, PackageImageViewSet, TravelViewSet, DealViewSet, DoneDealViewSet
+
 
 router = routers.DefaultRouter()
+router.register('user-points', UserPointViewSet)
 router.register('profiles', ProfileViewSet)
 router.register('packages', PackageViewSet)
 router.register('package-images', PackageImageViewSet)
 router.register('travels', TravelViewSet)
-
+router.register('deals', DealViewSet)
+router.register('done-deals', DoneDealViewSet)
 
 from .site import site as el_site
 

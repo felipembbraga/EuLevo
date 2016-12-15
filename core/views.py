@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
+from models import UserPoint
 from .models import CoreUser, Profile
-from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, RegisterSerializer
+from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer
 
 
 class SocialLoginView(JSONWebTokenAPIView):
@@ -144,7 +145,33 @@ class ProfileViewSet(ModelViewSet):
         """
         return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
 
+class UserPointViewSet(ModelViewSet):
+    queryset = UserPoint.objects.all()
+    serializer_class = UserPointSerializer
+    permission_classes = (
+        IsAuthenticated,
+        DjangoObjectPermissions,
+    )
+    http_method_names = ['get', 'post']
 
+    def create(self, request, *args, **kwargs):
+        try:
+            request.data['user'] = request.user.pk
+        except:
+            pass
+        if not hasattr(request.user, 'userpoint'):
+            return super(UserPointViewSet, self).create(request, *args, **kwargs)
+        return self.update(request, *args, **kwargs)
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        if request.user:
+            instance = request.user.userpoint
+        else:
+            instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 

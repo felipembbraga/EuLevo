@@ -105,7 +105,7 @@ class RegisterSerializer(Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoreUser
-        fields = ['pk', 'email', 'full_profile']
+        fields = ['pk', 'email', 'full_profile', 'point']
 
     def __init__(self, with_token=True, instance=None, data={}, **kwargs):
         self.with_token = with_token
@@ -127,4 +127,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UserPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPoint
-        fields = ['pk', 'point', 'updated_at']
+        fields = ['pk', 'user', 'point', 'updated_at']
+
+
+    # def __init__(self, hide_user=False, instance=None, data=None, **kwargs):
+    #     self.hide_user=hide_user
+    #     super(UserPointSerializer, self).__init__(instance, data, **kwargs)
+    #
+    # def get_fields(self):
+    #     fields = super(UserPointSerializer, self).get_fields()
+    #     if self.hide_user:
+    #         fields.remove('user')
+    #     return fields
+

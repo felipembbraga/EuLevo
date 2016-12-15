@@ -34,12 +34,25 @@ class Package(models.Model):
     description = models.CharField(max_length=140)
     weight_range = models.IntegerField(choices=WEIGHTS)
     destiny = models.PointField()
+    destiny_description = models.CharField(max_length=200, default='')
     receiver_name = models.CharField(max_length=100)
     receiver_phone = models.CharField(max_length=15)
     delivery_until = models.DateField()
     closed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def package_images(self):
+        from eulevo.serializers import PackageImageSerializer
+        package_images = self.packageimage_set.all()
+        return PackageImageSerializer(package_images, many=True).data
+
+    @property
+    def user_point(self):
+        from core.serializers import UserPointSerializer
+        data = hasattr(self.owner, 'userpoint') and getattr(self.owner, 'userpoint') or None
+        return UserPointSerializer(data, many=False).data
 
 
 @receiver(post_save, sender=Package)
@@ -53,9 +66,8 @@ class PackageImage(models.Model):
     image = models.ImageField(upload_to=package_image_directory_path)
 
 
-
-
 @receiver(post_save, sender=PackageImage)
 def packageimage_post_save(sender, instance, created, **kwargs):
     assign_perm('change_packageimage', instance.package.owner, instance)
+    assign_perm('delete_packageimage', instance.package.owner, instance)
 

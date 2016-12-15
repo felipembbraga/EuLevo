@@ -5,7 +5,7 @@ from core.serializers import UserSerializer
 from eulevo.models import Package,PackageImage, Travel, Deal, DoneDeal
 
 
-class PackageSerializer(GeoFeatureModelSerializer):
+class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
         geo_field = 'destiny'
@@ -15,15 +15,24 @@ class PackageSerializer(GeoFeatureModelSerializer):
             'description',
             'weight_range',
             'destiny',
+            'destiny_description',
             'receiver_name',
             'receiver_phone',
             'delivery_until',
             'closed',
-            'created_at'
+            'created_at',
+            'package_images',
+            'user_point'
         ]
 
 class PackageImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PackageImage
-        fields = '__all__'
+        fields = [
+            'pk',
+            'package',
+            'image'
+        ]
+
+
 
