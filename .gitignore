@@ -56,3 +56,5 @@ ENV/
 /bin/gunicorn_start
 /deploy/supervisor.conf
 /deploy/nginx.conf
+/media/
+/static/
