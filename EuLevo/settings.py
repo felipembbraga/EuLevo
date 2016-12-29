@@ -12,10 +12,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 
-
-# alteração para tag v0.0.7
-
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
