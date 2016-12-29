@@ -189,3 +189,4 @@ JWT_AUTH = {
         'core.utils.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=366)
 }
+

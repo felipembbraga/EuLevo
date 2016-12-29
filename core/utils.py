@@ -1,6 +1,5 @@
 from core.serializers import ProfileSerializer, UserPointSerializer
-from core.models import Profile
-from models import UserPoint
+from .models import Profile, UserPoint
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
@@ -23,13 +22,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
         'token': token,
         'email': user and user.email or None
     }
-    try:
-        data['profile'] = ProfileSerializer(user.profile).data
-    except Profile.RelatedObjectDoesNotExist:
-        pass
-    try:
-        data['point'] = UserPointSerializer(user.userpoint).data
-    except UserPoint.RelatedObjectDoesNotExist:
-        pass
-    finally:
-        return data
+    if hasattr(user, 'profile'):
+        data['profile'] = ProfileSerializer(getattr(user, 'profile')).data
+    if hasattr(user, 'userpoint'):
+        data['point'] = UserPointSerializer(getattr(user, 'userpoint')).data
+    return data

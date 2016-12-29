@@ -40,13 +40,17 @@ class PackageViewSet(EuLevoModelViewSet):
                 })
                 return Response(data)
             del request.GET['travel']
+            radius = 5000
+            if 'radius' in request.GET.keys():
+                radius= request.GET.get('radius')
+                del request.GET['radius']
             lookups = {
-                'destiny__distance_lte': (travel.destiny, 5000),
+                'destiny__distance_lte': (travel.destiny, 10000),
                 'weight_range__lte': travel.weight_range,
                 'delivery_until__gte': travel.dt_travel
             }
             if hasattr(request.user, 'userpoint'):
-                lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, 5000)
+                lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, radius)
             self.queryset = self.queryset.filter(**lookups).exclude(
                 Q(owner=request.user)|Q(deal__in=Deal.objects.filter(travel=travel, status__in=(1,2,3,5))))
         else:

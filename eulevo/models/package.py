@@ -27,7 +27,11 @@ def package_image_directory_path(instance, filename):
 
     """
     now = datetime.datetime.now()
-    return 'package_{0}/{1}_{2}'.format(instance.package.id, now, filename)
+    return 'user_{0}/package_{1}/{2}_{3}'.format(
+        instance.package.owner.id,
+        instance.package.id,
+        now,
+        filename)
 
 class Package(models.Model):
     owner = models.ForeignKey(CoreUser)

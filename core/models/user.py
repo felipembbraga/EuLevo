@@ -7,6 +7,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin, Permission
 from django.contrib.gis.db import models
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.six import python_2_unicode_compatible
@@ -36,7 +37,7 @@ def profile_directory_path(instance, filename):
 
     """
     now = datetime.datetime.now()
-    return 'profile_{0}/{1}_{2}'.format(instance.id, now, filename)
+    return 'user_{0}/profile/{1}_{2}'.format(instance.user.id, now, filename)
 
 
 class CoreUserManager(BaseUserManager):
@@ -209,7 +210,8 @@ def coreuser_post_save(sender, instance, created, **kwargs):
         permissions = Permission.objects.filter(content_type=ct)
         instance.user_permissions.add(*permissions)
     for ct in ContentType.objects.filter(app_label='eulevo'):
-        permissions = Permission.objects.filter(content_type=ct, codename__startswith='add')
+
+        permissions = Permission.objects.filter(content_type=ct).filter(Q(codename__startswith='add') | Q(codename__startswith='change'))
         instance.user_permissions.add(*permissions)
 
 
