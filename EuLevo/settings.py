@@ -50,7 +50,8 @@ INSTALLED_APPS = [
                      'django.contrib.gis',
                      'guardian',
                      'rest_framework',
-                     'rest_framework_gis'
+                     'rest_framework_gis',
+                     'storages'
                  ] + PROJECTS_APP
 
 MIDDLEWARE = [
@@ -191,6 +192,12 @@ JWT_AUTH = {
         'core.utils.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=366)
 }
+
+# Configure storage
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = "eulevostorage"
+AZURE_ACCOUNT_KEY = "dcJN48lsq1QIeF70WudWzt38Yj5tZCs6xFIUZI8xsIUnLWiYKkrGyX2+Bpkads7Dwqi1YKxkUMOlmbdjlWDHMw=="
+AZURE_CONTAINER="eulevo"
 
 try:
     from local_settings import *

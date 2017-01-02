@@ -16,6 +16,7 @@ WEIGHTS = (
     (5, 'mais de 20kg')
 )
 
+
 def package_image_directory_path(instance, filename):
     """
     Função para definir o diretório onde as imagens de encomenda serão armazenadas
@@ -26,12 +27,13 @@ def package_image_directory_path(instance, filename):
     Returns: String
 
     """
+    import hashlib
+    user_folder = hashlib.new('md5', 'user_{0}'.format(instance.package.owner.id)).hexdigest()
+    package_folder = hashlib.new('md5', 'package_{0}'.format(instance.package.id)).hexdigest()
     now = datetime.datetime.now()
-    return 'user_{0}/package_{1}/{2}_{3}'.format(
-        instance.package.owner.id,
-        instance.package.id,
-        now,
-        filename)
+    filename = '{0}_{1}'.format(now, filename)
+    return '{0}/{1}/{2}'.format(user_folder, package_folder, filename)
+
 
 class Package(models.Model):
     owner = models.ForeignKey(CoreUser)
@@ -58,20 +60,31 @@ class Package(models.Model):
         data = hasattr(self.owner, 'userpoint') and getattr(self.owner, 'userpoint') or None
         return UserPointSerializer(data, many=False).data
 
+    def deals(self):
+        from eulevo.serializers import DealSerializer
+        deals = self.deal_set.all()
+        return DealSerializer(deals, many=True).data
+
 
 @receiver(post_save, sender=Package)
 def package_post_save(sender, instance, created, **kwargs):
-
     assign_perm('change_package', instance.owner, instance)
 
 
 class PackageImage(models.Model):
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=package_image_directory_path)
+
+    def delete(self, *args, **kwargs):
+        # You have to prepare what you need before delete the model
+        storage, name = self.image.storage, self.image.name
+        # Delete the model before the file
+        super(PackageImage, self).delete(*args, **kwargs)
+        # Delete the file after the model
+        storage.delete(name)
 
 
 @receiver(post_save, sender=PackageImage)
 def packageimage_post_save(sender, instance, created, **kwargs):
     assign_perm('change_packageimage', instance.package.owner, instance)
     assign_perm('delete_packageimage', instance.package.owner, instance)
-
