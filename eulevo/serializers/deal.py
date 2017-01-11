@@ -23,8 +23,8 @@ class DoneDealSerializer(serializers.ModelSerializer):
         model = DoneDeal
         fields = [
             'pk',
-            'deal'
-
+            'deal',
+            'get_deal'
         ]
 
     def create(self, validated_data):

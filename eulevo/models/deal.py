@@ -106,6 +106,10 @@ class DoneDeal(models.Model):
     #         self.token = ''.join([random.randrange(0,10) for i in range(10)])
     #     super(DoneDeal, self).save(force_insert, force_update, using, update_fields)
 
+    def get_deal(self):
+        from eulevo.serializers import DealSerializer
+        return DealSerializer(self.deal, many=False).data
+
 
 @receiver(post_save, sender=DoneDeal)
 def donedeal_post_save(sender, instance, created, **kwargs):
