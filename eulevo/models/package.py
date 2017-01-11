@@ -36,6 +36,8 @@ def package_image_directory_path(instance, filename):
 
 
 class Package(models.Model):
+    """
+    """
     owner = models.ForeignKey(CoreUser)
     description = models.CharField(max_length=140)
     weight_range = models.IntegerField(choices=WEIGHTS)
@@ -50,17 +52,32 @@ class Package(models.Model):
 
     @property
     def package_images(self):
+        """
+
+        Returns:
+
+        """
         from eulevo.serializers import PackageImageSerializer
         package_images = self.packageimage_set.all()
         return PackageImageSerializer(package_images, many=True).data
 
     @property
     def user_point(self):
+        """
+
+        Returns:
+
+        """
         from core.serializers import UserPointSerializer
         data = hasattr(self.owner, 'userpoint') and getattr(self.owner, 'userpoint') or None
         return UserPointSerializer(data, many=False).data
 
     def deals(self):
+        """
+
+        Returns:
+
+        """
         from eulevo.serializers import DealSerializer
         deals = self.deal_set.all()
         return DealSerializer(deals, many=True).data
@@ -68,14 +85,30 @@ class Package(models.Model):
 
 @receiver(post_save, sender=Package)
 def package_post_save(sender, instance, created, **kwargs):
+    """
+
+    Args:
+        sender:
+        instance:
+        created:
+        kwargs:
+    """
     assign_perm('change_package', instance.owner, instance)
 
 
 class PackageImage(models.Model):
+    """
+    """
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=package_image_directory_path)
 
     def delete(self, *args, **kwargs):
+        """
+
+        Args:
+            args:
+            kwargs:
+        """
         # You have to prepare what you need before delete the model
         storage, name = self.image.storage, self.image.name
         # Delete the model before the file
@@ -86,5 +119,13 @@ class PackageImage(models.Model):
 
 @receiver(post_save, sender=PackageImage)
 def packageimage_post_save(sender, instance, created, **kwargs):
+    """
+
+    Args:
+        sender:
+        instance:
+        created:
+        kwargs:
+    """
     assign_perm('change_packageimage', instance.package.owner, instance)
     assign_perm('delete_packageimage', instance.package.owner, instance)

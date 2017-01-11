@@ -8,10 +8,13 @@ class DealSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'package',
+            'get_package',
             'travel',
+            'get_travel',
             'user',
             'status',
-            'created_at'
+            'created_at',
+            'updated_at'
         ]
 
 

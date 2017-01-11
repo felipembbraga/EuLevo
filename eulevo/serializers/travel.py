@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from core.serializers import UserSerializer
-from eulevo.models import Package,PackageImage, Travel, Deal, DoneDeal
+from eulevo.models import Travel
 
 
 class TravelSerializer(serializers.ModelSerializer):

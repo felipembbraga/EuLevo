@@ -19,7 +19,9 @@ import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-LOCAL = lambda x: os.path.join(BASE_DIR, x)
+
+def local_dir(directory):
+    return os.path.join(BASE_DIR, directory)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -142,11 +144,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = LOCAL('static')
+STATIC_ROOT = local_dir('static')
 
 # Media Files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = LOCAL('media')
+MEDIA_ROOT = local_dir('media')
 
 # Cors
 CORS_ORIGIN_ALLOW_ALL = True
@@ -197,9 +199,9 @@ JWT_AUTH = {
 DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 AZURE_ACCOUNT_NAME = "eulevostorage"
 AZURE_ACCOUNT_KEY = "dcJN48lsq1QIeF70WudWzt38Yj5tZCs6xFIUZI8xsIUnLWiYKkrGyX2+Bpkads7Dwqi1YKxkUMOlmbdjlWDHMw=="
-AZURE_CONTAINER="eulevo"
+AZURE_CONTAINER = "eulevo"
 
 try:
     from local_settings import *
-except:
+except ImportError:
     pass

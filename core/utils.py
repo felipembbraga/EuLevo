@@ -1,5 +1,4 @@
 from core.serializers import ProfileSerializer, UserPointSerializer
-from .models import Profile, UserPoint
 
 
 def jwt_response_payload_handler(token, user=None, request=None):

@@ -6,6 +6,7 @@ class EuLevoAdminSite(AdminSite):
     site_header = 'Eu Levo'
     site_title = 'Eu Levo - Administração'
 
+
 site = EuLevoAdminSite(name='el_admin')
 
 
@@ -38,4 +39,5 @@ def register(*models, **kwargs):
         admin_site.register(models, admin_class=admin_class)
 
         return admin_class
+
     return _model_admin_wrapper

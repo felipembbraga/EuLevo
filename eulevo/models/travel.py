@@ -18,6 +18,7 @@ VEHICLES = (
     (7, 'Navio')
 )
 
+
 class Travel(models.Model):
     owner = models.ForeignKey(CoreUser)
     weight_range = models.IntegerField(choices=WEIGHTS)

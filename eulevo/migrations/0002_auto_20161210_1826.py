@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('eulevo', '0001_initial'),
     ]
@@ -15,7 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='deal',
             name='status',
-            field=models.IntegerField(choices=[(1, b'aberto'), (2, b'concluido'), (3, b'rejeitado'), (4, b'cancelado'), (5, b'finalizado')], default=1),
+            field=models.IntegerField(
+                choices=[(1, b'aberto'), (2, b'concluido'), (3, b'rejeitado'), (4, b'cancelado'), (5, b'finalizado')],
+                default=1),
         ),
         migrations.AlterField(
             model_name='donedeal',
@@ -25,6 +26,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='donedeal',
             name='status',
-            field=models.IntegerField(choices=[(1, b'aguardando coleta'), (2, b'em viagem'), (3, b'entregue'), (4, b'finalizado'), (5, b'contestado'), (6, b'deletado')], default=1),
+            field=models.IntegerField(
+                choices=[(1, b'aguardando coleta'), (2, b'em viagem'), (3, b'entregue'), (4, b'finalizado'),
+                         (5, b'contestado'), (6, b'deletado')], default=1),
         ),
     ]

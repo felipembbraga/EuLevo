@@ -4,6 +4,7 @@ from django.db.utils import IntegrityError
 from django.utils.translation import ugettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.fields import empty
 from rest_framework_jwt.compat import PasswordField
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.compat import Serializer
@@ -107,7 +108,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = CoreUser
         fields = ['pk', 'email', 'full_profile', 'point']
 
-    def __init__(self, with_token=True, instance=None, data={}, **kwargs):
+    def __init__(self, with_token=True, instance=None, data=empty, **kwargs):
         self.with_token = with_token
         super(UserSerializer, self).__init__(instance, data, **kwargs)
 
@@ -129,14 +130,12 @@ class UserPointSerializer(serializers.ModelSerializer):
         model = UserPoint
         fields = ['pk', 'user', 'point', 'updated_at']
 
-
-    # def __init__(self, hide_user=False, instance=None, data=None, **kwargs):
-    #     self.hide_user=hide_user
-    #     super(UserPointSerializer, self).__init__(instance, data, **kwargs)
-    #
-    # def get_fields(self):
-    #     fields = super(UserPointSerializer, self).get_fields()
-    #     if self.hide_user:
-    #         fields.remove('user')
-    #     return fields
-
+        # def __init__(self, hide_user=False, instance=None, data=None, **kwargs):
+        #     self.hide_user=hide_user
+        #     super(UserPointSerializer, self).__init__(instance, data, **kwargs)
+        #
+        # def get_fields(self):
+        #     fields = super(UserPointSerializer, self).get_fields()
+        #     if self.hide_user:
+        #         fields.remove('user')
+        #     return fields

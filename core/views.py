@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from rest_framework import mixins
-from rest_framework.permissions import AllowAny, DjangoObjectPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoObjectPermissions, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
 from models import UserPoint
-from .models import CoreUser, Profile
-from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer
+from .models import Profile
+from .serializers import ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer
 
 
 class SocialLoginView(JSONWebTokenAPIView):
@@ -145,6 +144,7 @@ class ProfileViewSet(ModelViewSet):
         """
         return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
 
+
 class UserPointViewSet(ModelViewSet):
     queryset = UserPoint.objects.all()
     serializer_class = UserPointSerializer
@@ -157,7 +157,7 @@ class UserPointViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             request.data['user'] = request.user.pk
-        except:
+        except AttributeError:
             pass
         if not hasattr(request.user, 'userpoint'):
             return super(UserPointViewSet, self).create(request, *args, **kwargs)
@@ -165,7 +165,7 @@ class UserPointViewSet(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
-        if request.user:
+        if hasattr(request, 'user'):
             instance = request.user.userpoint
         else:
             instance = self.get_object()
@@ -173,5 +173,3 @@ class UserPointViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
-
-

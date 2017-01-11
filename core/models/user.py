@@ -189,7 +189,7 @@ class CoreUser(AbstractBaseUser, PermissionsMixin):
         if self.sociallogin_set.filter(social_type=social_type).exists():
             try:
                 self.sociallogin_set.get(social_type=social_type, key=key)
-            except:
+            except SocialLogin.DoesNotExist:
                 return False
         else:
             self.sociallogin_set.create(key=key, social_type=social_type)
@@ -210,8 +210,8 @@ def coreuser_post_save(sender, instance, created, **kwargs):
         permissions = Permission.objects.filter(content_type=ct)
         instance.user_permissions.add(*permissions)
     for ct in ContentType.objects.filter(app_label='eulevo'):
-
-        permissions = Permission.objects.filter(content_type=ct).filter(Q(codename__startswith='add') | Q(codename__startswith='change'))
+        permissions = Permission.objects.filter(content_type=ct).filter(
+            Q(codename__startswith='add') | Q(codename__startswith='change') | Q(codename__startswith='delete_packageimage'))
         instance.user_permissions.add(*permissions)
 
 
@@ -227,6 +227,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to=profile_directory_path, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 @receiver(post_save, sender=Profile)
 def profile_post_save(sender, instance, created, **kwargs):

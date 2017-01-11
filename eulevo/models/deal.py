@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 
 from core.models import CoreUser
+
 from .package import Package
 from .travel import Travel
 from decimal import Decimal
@@ -51,6 +52,14 @@ class Deal(models.Model):
     class Meta:
         unique_together = ('package', 'travel')
 
+    def get_package(self):
+        from eulevo.serializers import PackageSerializer
+        return PackageSerializer(self.package, many=False).data
+
+    def get_travel(self):
+        from eulevo.serializers import TravelSerializer
+        return TravelSerializer(self.travel, many=False).data
+
 
 @receiver(post_save, sender=Deal)
 def deal_post_save(sender, instance, created, **kwargs):
@@ -77,7 +86,7 @@ class DoneDeal(models.Model):
             str(today.year),
             str(today.month).rjust(2, '0'),
             str(today.day).rjust(2, '0'),
-            str(deal.pk).rjust(4,'0')
+            str(deal.pk).rjust(4, '0')
         )
 
     @staticmethod

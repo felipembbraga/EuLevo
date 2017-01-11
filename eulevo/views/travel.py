@@ -19,7 +19,7 @@ class TravelViewSet(EuLevoModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             request.data['owner'] = request.user.pk
-        except:
+        except AttributeError:
             pass
         return super(TravelViewSet, self).create(request, *args, **kwargs)
 
@@ -36,16 +36,22 @@ class TravelViewSet(EuLevoModelViewSet):
                 })
                 return Response(data)
             del request.GET['package']
-            lookups = {
-                'destiny__distance_lte': (package.destiny, 5000),
-                'weight_range__gte': package.weight_range,
-                'dt_travel__lte': package.delivery_until
+            if 'deal' in request.GET.keys():
+                self.queryset = self.queryset.filter(
+                    deal__in=Deal.objects.filter(package=package, status__in=(1, 2, 3))
+                )
+                del request.GET['deal']
+            else:
+                lookups = {
+                    'destiny__distance_lte': (package.destiny, 5000),
+                    'weight_range__gte': package.weight_range,
+                    'dt_travel__lte': package.delivery_until
 
-            }
-            if hasattr(request.user, 'userpoint'):
-                lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, 5000)
-            self.queryset = self.queryset.filter(**lookups).exclude(
-                Q(owner=request.user)|Q(deal__in=Deal.objects.filter(package=package, status__in=(1,2,3,5))))
+                }
+                if hasattr(request.user, 'userpoint'):
+                    lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, 5000)
+                self.queryset = self.queryset.filter(**lookups).exclude(
+                    Q(owner=request.user) | Q(deal__in=Deal.objects.filter(package=package, status__in=(1, 2, 3, 5))))
         else:
             request.GET['owner'] = request.user
         return super(TravelViewSet, self).list(request, *args, **kwargs)

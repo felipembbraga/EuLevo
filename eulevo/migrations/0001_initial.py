@@ -11,7 +11,6 @@ import eulevo.models.package
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -31,7 +30,9 @@ class Migration(migrations.Migration):
             name='Deal',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.IntegerField(choices=[(1, b'aberto'), (2, b'concluido'), (3, b'rejeitado'), (4, b'cancelado'), (5, b'finalizado')])),
+                ('status', models.IntegerField(
+                    choices=[(1, b'aberto'), (2, b'concluido'), (3, b'rejeitado'), (4, b'cancelado'),
+                             (5, b'finalizado')])),
                 ('last_value', models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=20)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -44,7 +45,8 @@ class Migration(migrations.Migration):
                 ('status', models.IntegerField(choices=[(1, b'aberto'), (2, 'conclu\xeddo')])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('deal', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='eulevo.Deal')),
-                ('messages', models.ManyToManyField(related_name='contestmessages', through='eulevo.ContestMessage', to=settings.AUTH_USER_MODEL)),
+                ('messages', models.ManyToManyField(related_name='contestmessages', through='eulevo.ContestMessage',
+                                                    to=settings.AUTH_USER_MODEL)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -58,7 +60,9 @@ class Migration(migrations.Migration):
                 ('received_at', models.DateTimeField(blank=True, null=True)),
                 ('token_checked', models.BooleanField(default=False)),
                 ('observation', models.CharField(max_length=140)),
-                ('status', models.IntegerField(choices=[(1, b'aguardando coleta'), (2, b'em viagem'), (3, b'entregue'), (4, b'finalizado'), (5, b'contestado'), (6, b'deletado')])),
+                ('status', models.IntegerField(
+                    choices=[(1, b'aguardando coleta'), (2, b'em viagem'), (3, b'entregue'), (4, b'finalizado'),
+                             (5, b'contestado'), (6, b'deletado')])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('deal', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='eulevo.Deal')),
@@ -69,7 +73,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('description', models.CharField(max_length=140)),
-                ('weight_range', models.IntegerField(choices=[(1, b'0 a 5kg'), (2, b'6 a 10kg'), (3, b'11 a 15kg'), (4, b'16 a 20kg'), (5, b'mais de 20kg')])),
+                ('weight_range', models.IntegerField(
+                    choices=[(1, b'0 a 5kg'), (2, b'6 a 10kg'), (3, b'11 a 15kg'), (4, b'16 a 20kg'),
+                             (5, b'mais de 20kg')])),
                 ('destiny', django.contrib.gis.db.models.fields.PointField(srid=4326)),
                 ('receiver_name', models.CharField(max_length=100)),
                 ('receiver_phone', models.CharField(max_length=15)),
@@ -102,9 +108,13 @@ class Migration(migrations.Migration):
             name='Travel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('weight_range', models.IntegerField(choices=[(1, b'0 a 5kg'), (2, b'6 a 10kg'), (3, b'11 a 15kg'), (4, b'16 a 20kg'), (5, b'mais de 20kg')])),
+                ('weight_range', models.IntegerField(
+                    choices=[(1, b'0 a 5kg'), (2, b'6 a 10kg'), (3, b'11 a 15kg'), (4, b'16 a 20kg'),
+                             (5, b'mais de 20kg')])),
                 ('destiny', django.contrib.gis.db.models.fields.PointField(srid=4326)),
-                ('vehicle_type', models.IntegerField(choices=[(1, b'Carro de passeio'), (2, b'Caminhonete'), (3, b'Moto'), (4, 'Caminh\xe3o'), (5, '\xd4nibus'), (6, 'Avi\xe3o'), (7, b'Navio')])),
+                ('vehicle_type', models.IntegerField(
+                    choices=[(1, b'Carro de passeio'), (2, b'Caminhonete'), (3, b'Moto'), (4, 'Caminh\xe3o'),
+                             (5, '\xd4nibus'), (6, 'Avi\xe3o'), (7, b'Navio')])),
                 ('dt_travel', models.DateField()),
                 ('blocked', models.BooleanField(default=False)),
                 ('closed', models.BooleanField(default=False)),
@@ -152,10 +162,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='rating',
-            unique_together=set([('user', 'deal')]),
+            unique_together={('user', 'deal')},
         ),
         migrations.AlterUniqueTogether(
             name='deal',
-            unique_together=set([('package', 'travel')]),
+            unique_together={('package', 'travel')},
         ),
     ]
