@@ -37,6 +37,12 @@ class Travel(models.Model):
         data = hasattr(self.owner, 'userpoint') and getattr(self.owner, 'userpoint') or None
         return UserPointSerializer(data, many=False).data
 
+    def get_user(self):
+        donedeal = self.deal_set.filter(donedeal__isnull=False).exists()
+        if donedeal:
+            from core.serializers import ProfileSerializer
+            return ProfileSerializer(self.owner.profile, many=False).data
+
 
 @receiver(post_save, sender=Travel)
 def travel_post_save(sender, instance, created, **kwargs):

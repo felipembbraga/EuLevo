@@ -19,5 +19,6 @@ class TravelSerializer(serializers.ModelSerializer):
             'closed',
             'created_at',
             'updated_at',
-            'user_point'
+            'user_point',
+            'get_user'
         ]

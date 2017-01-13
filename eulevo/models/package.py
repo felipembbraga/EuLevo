@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 
-from core.models import CoreUser
+from core.models import CoreUser, Profile
 import datetime
 
 WEIGHTS = (
@@ -81,6 +81,16 @@ class Package(models.Model):
         from eulevo.serializers import DealSerializer
         deals = self.deal_set.all()
         return DealSerializer(deals, many=True).data
+
+    def has_donedeal(self):
+        return self.deal_set.filter(donedeal__isnull=False).exists()
+
+    def get_user(self):
+        donedeal = self.deal_set.filter(donedeal__isnull=False).exists()
+        if donedeal:
+            from core.serializers import ProfileSerializer
+            return ProfileSerializer(self.owner.profile, many=False).data
+
 
 
 @receiver(post_save, sender=Package)

@@ -25,7 +25,24 @@ class DealViewSet(EuLevoModelViewSet):
             request.data['user'] = request.user.pk
         except AttributeError:
             pass
+
+        deal = Deal.objects.filter(
+            package__pk=request.data.get('package'),
+            travel__pk=request.data.get('travel')
+        ).first()
+
+        if deal:
+            self.deal = deal
+            request.data['status'] = 1
+            return self.partial_update(request, *args, **kwargs)
+
         return super(DealViewSet, self).create(request, *args, **kwargs)
+
+
+    def get_object(self):
+        if hasattr(self, 'deal'):
+            return self.deal
+        return super(DealViewSet, self).get_object()
 
     def list(self, request, *args, **kwargs):
         request.GET = request.GET.copy()

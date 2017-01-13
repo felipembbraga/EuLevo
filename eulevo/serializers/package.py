@@ -20,7 +20,9 @@ class PackageSerializer(serializers.ModelSerializer):
             'closed',
             'created_at',
             'package_images',
-            'user_point'
+            'user_point',
+            'get_user',
+            'has_donedeal'
         ]
 
 
