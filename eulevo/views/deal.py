@@ -1,3 +1,4 @@
+import datetime
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated, DjangoObjectPermissions
 from rest_framework.response import Response
@@ -29,8 +30,10 @@ class DealViewSet(EuLevoModelViewSet):
     def list(self, request, *args, **kwargs):
         request.GET = request.GET.copy()
 
-        self.queryset = self.queryset.filter(Q(package__owner=request.user) | Q(travel__owner=request.user)).exclude(
-            status__in=(3, 4, 5))
+        self.queryset = self.queryset.filter(
+            Q(package__owner=request.user) | Q(travel__owner=request.user),
+            travel__dt_travel__gte=datetime.date.today()
+        ).exclude(status__in=(3, 4, 5))
 
         if 'travel' in request.GET.keys():
             travel = Travel.objects.filter(pk=request.GET.get('travel'), owner=request.user).first()
@@ -72,11 +75,9 @@ class DoneDealViewSet(EuLevoModelViewSet):
         self.serializer_class = DoneDealViewSerializer
         return super(DoneDealViewSet, self).list(request, *args, **kwargs)
 
-    # def create(self, request, *args, **kwargs):
-    #     try:
-    #         request.data['user'] = request.user.pk
-    #     except:
-    #         pass
-    #     return super(DoneDealViewSet, self).create(request, *args, **kwargs)
-
-
+        # def create(self, request, *args, **kwargs):
+        #     try:
+        #         request.data['user'] = request.user.pk
+        #     except:
+        #         pass
+        #     return super(DoneDealViewSet, self).create(request, *args, **kwargs)

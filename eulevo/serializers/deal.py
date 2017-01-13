@@ -12,9 +12,11 @@ class DealSerializer(serializers.ModelSerializer):
             'travel',
             'get_travel',
             'user',
+            'user_email',
             'status',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'get_donedeal'
         ]
 
 

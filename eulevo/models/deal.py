@@ -52,6 +52,9 @@ class Deal(models.Model):
     class Meta:
         unique_together = ('package', 'travel')
 
+    def user_email(self):
+        return self.user.email
+
     def get_package(self):
         from eulevo.serializers import PackageSerializer
         return PackageSerializer(self.package, many=False).data
@@ -59,6 +62,11 @@ class Deal(models.Model):
     def get_travel(self):
         from eulevo.serializers import TravelSerializer
         return TravelSerializer(self.travel, many=False).data
+
+    def get_donedeal(self):
+        if hasattr(self, 'donedeal'):
+            return getattr(self, 'donedeal').pk
+        return -1
 
 
 @receiver(post_save, sender=Deal)
@@ -113,6 +121,8 @@ class DoneDeal(models.Model):
 
 @receiver(post_save, sender=DoneDeal)
 def donedeal_post_save(sender, instance, created, **kwargs):
+    instance.deal.status = 2
+    instance.deal.save()
     assign_perm('change_donedeal', instance.deal.travel.owner, instance)
     assign_perm('change_donedeal', instance.deal.package.owner, instance)
 
