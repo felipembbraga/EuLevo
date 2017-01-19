@@ -52,8 +52,7 @@ class PackageViewSet(EuLevoModelViewSet):
                     del request.GET['radius']
                 lookups = {
                     'destiny__distance_lte': (travel.destiny, 10000),
-                    'weight_range__lte': travel.weight_range,
-                    'delivery_until__gte': travel.dt_travel
+                    'weight_range__lte': travel.weight_range
                 }
                 if hasattr(request.user, 'userpoint'):
                     lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, radius)

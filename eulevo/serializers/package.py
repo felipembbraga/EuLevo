@@ -16,7 +16,6 @@ class PackageSerializer(serializers.ModelSerializer):
             'destiny_description',
             'receiver_name',
             'receiver_phone',
-            'delivery_until',
             'closed',
             'created_at',
             'package_images',

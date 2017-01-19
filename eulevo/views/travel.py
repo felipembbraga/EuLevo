@@ -1,3 +1,4 @@
+import datetime
 from django.db.models import Q
 from rest_framework.permissions import DjangoObjectPermissions, IsAuthenticated
 from rest_framework.response import Response
@@ -49,7 +50,7 @@ class TravelViewSet(EuLevoModelViewSet):
                 lookups = {
                     'destiny__distance_lte': (package.destiny, 10000),
                     'weight_range__gte': package.weight_range,
-                    'dt_travel__lte': package.delivery_until
+                    'dt_travel__lte': datetime.date.today()
 
                 }
                 if hasattr(request.user, 'userpoint'):

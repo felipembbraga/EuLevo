@@ -45,7 +45,7 @@ class Package(models.Model):
     destiny_description = models.CharField(max_length=200, default='')
     receiver_name = models.CharField(max_length=100)
     receiver_phone = models.CharField(max_length=15)
-    delivery_until = models.DateField()
+    # delivery_until = models.DateField()
     closed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
