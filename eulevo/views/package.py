@@ -46,7 +46,7 @@ class PackageViewSet(EuLevoModelViewSet):
                 )
                 del request.GET['deal']
             else:
-                radius = 1000000
+                radius = 5000
                 if 'radius' in request.GET.keys():
                     radius = request.GET.get('radius')
                     del request.GET['radius']
