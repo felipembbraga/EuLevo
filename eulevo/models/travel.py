@@ -37,11 +37,27 @@ class Travel(models.Model):
         data = hasattr(self.owner, 'userpoint') and getattr(self.owner, 'userpoint') or None
         return UserPointSerializer(data, many=False).data
 
+    @property
+    def owner_email(self):
+        return self.owner.email
+
     def get_user(self):
         donedeal = self.deal_set.filter(donedeal__isnull=False).exists()
         if donedeal:
             from core.serializers import ProfileSerializer
             return ProfileSerializer(self.owner.profile, many=False).data
+
+    def count_deals(self):
+        return self.deal_set.filter(status=1).count()
+
+
+    def get_packages(self):
+        deals = self.deal_set.filter(donedeal__isnull=False)
+        if deals.count() > 0:
+            from eulevo.serializers import PackageSoftSerializer
+            packages = [deal.package for deal in deals]
+            return PackageSoftSerializer(packages, many=True).data
+
 
 
 @receiver(post_save, sender=Travel)

@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework import routers
 
-from core.views import ProfileViewSet, SocialLoginView, RegisterView, UserPointViewSet
+from core.views import ProfileViewSet, SocialLoginView, RegisterView, UserPointViewSet, DeviceViewSet
 from eulevo.views import PackageViewSet, PackageImageViewSet, TravelViewSet, DealViewSet, DoneDealViewSet
 from .site import site as el_site
 
@@ -31,6 +31,7 @@ router.register('package-images', PackageImageViewSet)
 router.register('travels', TravelViewSet)
 router.register('deals', DealViewSet)
 router.register('done-deals', DoneDealViewSet)
+router.register('devices', DeviceViewSet)
 
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),

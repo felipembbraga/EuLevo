@@ -10,7 +10,8 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.compat import Serializer
 
 from core.exceptions import SocialUserNotFound
-from core.models import CoreUser, Profile, UserPoint
+from core.models import CoreUser, Profile, UserPoint, Device
+
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -139,3 +140,8 @@ class UserPointSerializer(serializers.ModelSerializer):
         #     if self.hide_user:
         #         fields.remove('user')
         #     return fields
+
+class DeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Device
+        fields = ['user', 'gcm_key']

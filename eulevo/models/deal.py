@@ -56,12 +56,13 @@ class Deal(models.Model):
         return self.user.email
 
     def get_package(self):
-        from eulevo.serializers import PackageSerializer
-        return PackageSerializer(self.package, many=False).data
+        from eulevo.serializers import PackageSoftSerializer
+        return PackageSoftSerializer(self.package, many=False).data
 
     def get_travel(self):
-        from eulevo.serializers import TravelSerializer
-        return TravelSerializer(self.travel, many=False).data
+        from eulevo.serializers import TravelSoftSerializer
+        return TravelSoftSerializer(self.travel, many=False).data
+
 
     def get_donedeal(self):
         if hasattr(self, 'donedeal'):
@@ -121,8 +122,11 @@ class DoneDeal(models.Model):
 
 @receiver(post_save, sender=DoneDeal)
 def donedeal_post_save(sender, instance, created, **kwargs):
-    instance.deal.status = 2
-    instance.deal.save()
+    deal = instance.deal
+    deal.status = 2
+    deal.save()
+    deal.package.deal_set.exclude(pk=deal.pk).update(status=3)
+
     assign_perm('change_donedeal', instance.deal.travel.owner, instance)
     assign_perm('change_donedeal', instance.deal.package.owner, instance)
 

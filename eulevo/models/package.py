@@ -82,15 +82,25 @@ class Package(models.Model):
         deals = self.deal_set.all()
         return DealSerializer(deals, many=True).data
 
+    def count_deals(self):
+        if self.deal_set.filter(donedeal__isnull=False).exists():
+            return 0
+        return self.deal_set.filter(status=1).count()
+
     def has_donedeal(self):
         return self.deal_set.filter(donedeal__isnull=False).exists()
+
+    def get_travel(self):
+        deal = self.deal_set.filter(donedeal__isnull=False).first()
+        if deal:
+            from eulevo.serializers import TravelSoftSerializer
+            return TravelSoftSerializer(deal.travel, many=False).data
 
     def get_user(self):
         donedeal = self.deal_set.filter(donedeal__isnull=False).exists()
         if donedeal:
             from core.serializers import ProfileSerializer
             return ProfileSerializer(self.owner.profile, many=False).data
-
 
 
 @receiver(post_save, sender=Package)

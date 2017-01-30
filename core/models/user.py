@@ -256,6 +256,9 @@ class Device(models.Model):
     """
     user = models.ForeignKey(CoreUser)
     gcm_key = models.CharField(max_length=255)
+    
+    class Meta:
+        unique_together=('user', 'gcm_key')
 
 
 @python_2_unicode_compatible

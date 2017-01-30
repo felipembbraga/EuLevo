@@ -4,9 +4,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
-from models import UserPoint
-from .models import Profile
-from .serializers import ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer
+from .models import Profile, UserPoint, Device
+from .serializers import ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer, DeviceSerializer
 
 
 class SocialLoginView(JSONWebTokenAPIView):
@@ -167,6 +166,37 @@ class UserPointViewSet(ModelViewSet):
         partial = kwargs.pop('partial', False)
         if hasattr(request, 'user'):
             instance = request.user.userpoint
+        else:
+            instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+class DeviceViewSet(ModelViewSet):
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    permission_classes = (
+        IsAuthenticated,
+        DjangoObjectPermissions,
+    )
+    http_method_names = ['get', 'post']
+
+    def create(self, request, *args, **kwargs):
+        try:
+            request.data['user'] = request.user.pk
+        except AttributeError:
+            pass
+        device = request.user.device_set.filter(gcm_key=request.data['gcm_key']).first()
+        if device:
+            return self.update(request, device, *args, **kwargs)
+        return super(DeviceViewSet, self).create(request, *args, **kwargs)
+
+
+    def update(self, request, device=None, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        if device:
+            instance = device
         else:
             instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
