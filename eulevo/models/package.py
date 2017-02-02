@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.gis.db import models
+from django.db.models.query_utils import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
@@ -34,6 +35,10 @@ def package_image_directory_path(instance, filename):
     filename = '{0}_{1}'.format(now, filename)
     return '{0}/{1}/{2}'.format(user_folder, package_folder, filename)
 
+class PackageManager(models.Manager):
+    def all_actives(self):
+        return self.exclude(Q(deleted=True) | Q(closed=True))
+
 
 class Package(models.Model):
     """
@@ -47,8 +52,12 @@ class Package(models.Model):
     receiver_phone = models.CharField(max_length=15)
     # delivery_until = models.DateField()
     closed = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    objects = PackageManager()
 
     @property
     def package_images(self):
@@ -114,7 +123,16 @@ def package_post_save(sender, instance, created, **kwargs):
         kwargs:
     """
     assign_perm('change_package', instance.owner, instance)
-
+    if not created:
+        if not instance.deleted:
+            if instance.deleted_at is not None:
+                instance.deleted_at = None
+                instance.save()
+        else:
+            if instance.deleted_at is None:
+                instance.deleted_at = datetime.datetime.now()
+                instance.save()
+                instance.deal_set.all().update(status=4)
 
 class PackageImage(models.Model):
     """

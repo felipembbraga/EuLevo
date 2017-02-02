@@ -10,7 +10,7 @@ from eulevo.models import Deal
 
 
 class TravelViewSet(EuLevoModelViewSet):
-    queryset = Travel.objects.all()
+    queryset = Travel.objects.all_actives()
     serializer_class = TravelSerializer
     permission_classes = (
         IsAuthenticated,
@@ -56,7 +56,9 @@ class TravelViewSet(EuLevoModelViewSet):
                 if hasattr(request.user, 'userpoint'):
                     lookups['owner__userpoint__point__distance_lte'] = (request.user.userpoint.point, radius)
                 self.queryset = self.queryset.filter(**lookups).exclude(
-                    Q(owner=request.user) | Q(deal__in=Deal.objects.filter(package=package, status__in=(1, 2, 3, 5))))
+                    Q(owner=request.user) |
+                    Q(deal__in=Deal.objects.filter(package=package, status__in=(1, 2, 3, 5)))
+                )
         else:
             request.GET['owner'] = request.user
         return super(TravelViewSet, self).list(request, *args, **kwargs)

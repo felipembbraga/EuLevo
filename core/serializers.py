@@ -131,17 +131,8 @@ class UserPointSerializer(serializers.ModelSerializer):
         model = UserPoint
         fields = ['pk', 'user', 'point', 'updated_at']
 
-        # def __init__(self, hide_user=False, instance=None, data=None, **kwargs):
-        #     self.hide_user=hide_user
-        #     super(UserPointSerializer, self).__init__(instance, data, **kwargs)
-        #
-        # def get_fields(self):
-        #     fields = super(UserPointSerializer, self).get_fields()
-        #     if self.hide_user:
-        #         fields.remove('user')
-        #     return fields
 
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = ['user', 'gcm_key']
+        fields = ['user', 'gcm_key', 'enabled']

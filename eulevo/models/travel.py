@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 from django.contrib.gis.db import models
+from django.db.models.query_utils import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
@@ -18,6 +19,10 @@ VEHICLES = (
     (7, 'Navio')
 )
 
+class TravelManager(models.Manager):
+    def all_actives(self):
+        return self.exclude(Q(deleted=True) | Q(closed=True))
+
 
 class Travel(models.Model):
     owner = models.ForeignKey(CoreUser)
@@ -28,8 +33,12 @@ class Travel(models.Model):
     dt_travel = models.DateField()
     blocked = models.BooleanField(default=False)
     closed = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    objects = TravelManager()
 
     @property
     def user_point(self):
@@ -59,10 +68,21 @@ class Travel(models.Model):
             return PackageSoftSerializer(packages, many=True).data
 
 
-
 @receiver(post_save, sender=Travel)
-def travel_post_save(sender, instance, created, **kwargs):
+def travel_post_save(sender, instance, created, raw, using, update_fields, **kwargs):
     assign_perm('change_travel', instance.owner, instance)
+    if not created:
+        if not instance.deleted:
+            if instance.deleted_at is not None:
+                instance.deleted_at = None
+                instance.save()
+        else:
+            if instance.deleted_at is None:
+                instance.deleted_at = datetime.datetime.now()
+                instance.save()
+                instance.deal_set.all().update(status=4)
+
+
 
 
 class TravelHistory(models.Model):

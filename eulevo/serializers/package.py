@@ -45,7 +45,9 @@ class PackageSerializer(serializers.ModelSerializer):
             'get_user',
             'has_donedeal',
             'get_travel',
-            'count_deals'
+            'count_deals',
+            'deleted',
+            'deleted_at'
         ]
 
 

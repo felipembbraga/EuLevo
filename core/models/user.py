@@ -256,9 +256,17 @@ class Device(models.Model):
     """
     user = models.ForeignKey(CoreUser)
     gcm_key = models.CharField(max_length=255)
-    
+    enabled = models.BooleanField(default=True)
+
     class Meta:
         unique_together=('user', 'gcm_key')
+
+
+@receiver(post_save, sender=Device)
+def device_post_save(sender, instance, *args, **kwargs):
+    assign_perm('change_device', instance.user, instance)
+    if instance.enabled == True:
+        Device.objects.filter(gcm_key=instance.gcm_key, enabled=True).exclude(pk=instance.pk).update(enabled=False)
 
 
 @python_2_unicode_compatible

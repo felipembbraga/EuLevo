@@ -44,6 +44,7 @@ class TravelSerializer(serializers.ModelSerializer):
             'get_user',
             'owner_email',
             'get_packages',
-            'count_deals'
+            'count_deals',
+            'deleted'
         ]
 
