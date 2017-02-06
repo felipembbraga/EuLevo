@@ -75,6 +75,11 @@ def deal_post_save(sender, instance, created, **kwargs):
     assign_perm('change_deal', instance.travel.owner, instance)
     assign_perm('change_deal', instance.package.owner, instance)
 
+    if instance.status == 4:
+        if hasattr(instance, 'donedeal'):
+            instance.donedeal.delete()
+
+
 
 class DoneDeal(models.Model):
     deal = models.OneToOneField(Deal)
@@ -126,9 +131,9 @@ def donedeal_post_save(sender, instance, created, **kwargs):
     deal.status = 2
     deal.save()
     deal.package.deal_set.exclude(pk=deal.pk).update(status=3)
-
-    assign_perm('change_donedeal', instance.deal.travel.owner, instance)
-    assign_perm('change_donedeal', instance.deal.package.owner, instance)
+    if created:
+        assign_perm('change_donedeal', instance.deal.travel.owner, instance)
+        assign_perm('change_donedeal', instance.deal.package.owner, instance)
 
 
 class DealContest(models.Model):

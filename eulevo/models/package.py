@@ -132,7 +132,10 @@ def package_post_save(sender, instance, created, **kwargs):
             if instance.deleted_at is None:
                 instance.deleted_at = datetime.datetime.now()
                 instance.save()
-                instance.deal_set.all().update(status=4)
+                deals = instance.deal_set.all()
+                for deal in deals:
+                    deal.status = 4
+                    deal.save()
 
 class PackageImage(models.Model):
     """
