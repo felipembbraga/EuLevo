@@ -1,0 +1,202 @@
+[
+  {
+    "model": "eulevo.package",
+    "pk": 36,
+    "fields": {
+      "owner": 6,
+      "description": "Macbook",
+      "weight_range": 2,
+      "destiny": "SRID=4326;POINT (-16.68686946952496 -49.26479447633027)",
+      "destiny_description": "St. Oeste, Goi\u00e2nia - GO, Brasil",
+      "receiver_name": "Teste De Destinat\u00e1rio",
+      "receiver_phone": "63981179217",
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-02T20:46:51.353Z",
+      "updated_at": "2017-02-02T20:46:51.353Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.package",
+    "pk": 37,
+    "fields": {
+      "owner": 2,
+      "description": "Carteira marrom",
+      "weight_range": 1,
+      "destiny": "SRID=4326;POINT (-22.74290611725108 -45.59634760022163)",
+      "destiny_description": "Fracalanza, Campos do Jord\u00e3o - SP, Brasil",
+      "receiver_name": "Fulano De Tal",
+      "receiver_phone": "63981185797",
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-03T12:53:24.398Z",
+      "updated_at": "2017-02-06T11:29:24.104Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.package",
+    "pk": 38,
+    "fields": {
+      "owner": 2,
+      "description": "Copo",
+      "weight_range": 1,
+      "destiny": "SRID=4326;POINT (-10.17538383758515 -48.882698379457)",
+      "destiny_description": "Centro, Para\u00edso do Tocantins - TO, Brasil",
+      "receiver_name": "Fulano",
+      "receiver_phone": "1224518815",
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-03T13:51:21.038Z",
+      "updated_at": "2017-02-03T13:51:21.038Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.package",
+    "pk": 39,
+    "fields": {
+      "owner": 3,
+      "description": "Carteira",
+      "weight_range": 1,
+      "destiny": "SRID=4326;POINT (-22.74289127526529 -45.59634760022163)",
+      "destiny_description": "Fracalanza, Campos do Jord\u00e3o - SP, Brasil",
+      "receiver_name": "deltrano",
+      "receiver_phone": "1222332122",
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-07T17:22:00.358Z",
+      "updated_at": "2017-02-10T14:01:02.356Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.packageimage",
+    "pk": 31,
+    "fields": {
+      "package": 36,
+      "image": "1ab162d05561afc0289e1533693b197c/6fd7980ab8686e23911460b35a012cf9/2017-02-02_174653.479_XtZrQUX.ujpg"
+    }
+  },
+  {
+    "model": "eulevo.packageimage",
+    "pk": 32,
+    "fields": {
+      "package": 36,
+      "image": "1ab162d05561afc0289e1533693b197c/6fd7980ab8686e23911460b35a012cf9/2017-02-02_174653.479_FYzVvrX.ujpg"
+    }
+  },
+  {
+    "model": "eulevo.packageimage",
+    "pk": 33,
+    "fields": {
+      "package": 37,
+      "image": "15e1576abc700ddfd9438e6ad1c86100/b88b3f77a43e7063eb02389c4b2b84d1/2017-02-03_095326.500_c0MQJtF.ujpg"
+    }
+  },
+  {
+    "model": "eulevo.packageimage",
+    "pk": 34,
+    "fields": {
+      "package": 38,
+      "image": "15e1576abc700ddfd9438e6ad1c86100/72e6d177d0812fce5f34b2a9f35dfb79/2017-02-03_105121.610_LSkVErE.ujpg"
+    }
+  },
+  {
+    "model": "eulevo.travel",
+    "pk": 13,
+    "fields": {
+      "owner": 6,
+      "weight_range": 3,
+      "destiny": "SRID=4326;POINT (-22.74290859091522 -45.59634760022163)",
+      "destiny_description": "Fracalanza, Campos do Jord\u00e3o - SP, Brasil",
+      "vehicle_type": 6,
+      "dt_travel": "2017-02-15",
+      "blocked": false,
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-02T20:44:39.314Z",
+      "updated_at": "2017-02-02T20:44:39.314Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.travel",
+    "pk": 14,
+    "fields": {
+      "owner": 3,
+      "weight_range": 2,
+      "destiny": "SRID=4326;POINT (-22.74285447950193 -45.59634760022163)",
+      "destiny_description": "Fracalanza, Campos do Jord\u00e3o - SP, Brasil",
+      "vehicle_type": 3,
+      "dt_travel": "2017-02-28",
+      "blocked": false,
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-03T18:39:29.692Z",
+      "updated_at": "2017-02-10T14:01:13.948Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.travel",
+    "pk": 15,
+    "fields": {
+      "owner": 3,
+      "weight_range": 2,
+      "destiny": "SRID=4326;POINT (-23.55048315144411 -46.63330938667059)",
+      "destiny_description": "S\u00e9, S\u00e3o Paulo - SP, Brasil",
+      "vehicle_type": 3,
+      "dt_travel": "2017-02-07",
+      "blocked": false,
+      "closed": false,
+      "deleted": false,
+      "created_at": "2017-02-07T13:34:08.554Z",
+      "updated_at": "2017-02-07T13:34:08.555Z",
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "eulevo.deal",
+    "pk": 23,
+    "fields": {
+      "package": 37,
+      "travel": 14,
+      "user": 2,
+      "status": 2,
+      "last_value": "0.00",
+      "created_at": "2017-02-06T11:13:11.967Z",
+      "updated_at": "2017-02-06T17:28:26.442Z"
+    }
+  },
+  {
+    "model": "eulevo.deal",
+    "pk": 24,
+    "fields": {
+      "package": 39,
+      "travel": 13,
+      "user": 3,
+      "status": 4,
+      "last_value": "0.00",
+      "created_at": "2017-02-07T17:27:21.613Z",
+      "updated_at": "2017-02-10T14:01:02.225Z"
+    }
+  },
+  {
+    "model": "eulevo.donedeal",
+    "pk": 13,
+    "fields": {
+      "deal": 23,
+      "protocol": "201702060023",
+      "token": "0126103501",
+      "delivery_at": null,
+      "received_at": null,
+      "token_checked": false,
+      "observation": null,
+      "status": 1,
+      "created_at": "2017-02-06T17:28:26.437Z",
+      "updated_at": "2017-02-06T17:28:26.437Z"
+    }
+  }
+]

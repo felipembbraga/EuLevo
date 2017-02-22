@@ -58,3 +58,4 @@ ENV/
 /deploy/nginx.conf
 /media/
 /static/
+/deploy/supervisor-celery.conf

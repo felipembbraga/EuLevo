@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from rest_framework import status
 from rest_framework.permissions import DjangoObjectPermissions, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
 from .models import Profile, UserPoint, Device
-from .serializers import ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer, DeviceSerializer
+from .serializers import ProfileSerializer, LoginSerializer, RegisterSerializer, UserPointSerializer, DeviceSerializer, \
+    UserSerializer
 
 
 class SocialLoginView(JSONWebTokenAPIView):
@@ -173,6 +175,7 @@ class UserPointViewSet(ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
 
+
 class DeviceViewSet(ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
@@ -180,26 +183,35 @@ class DeviceViewSet(ModelViewSet):
         IsAuthenticated,
         DjangoObjectPermissions,
     )
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete']
 
     def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        self.perform_create_with_user(serializer, request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create_with_user(self, serializer, user):
         try:
-            request.data['user'] = request.user.pk
-        except AttributeError:
-            pass
-        device = request.user.device_set.filter(gcm_key=request.data['gcm_key']).first()
-        if device:
-            return self.update(request, device, *args, **kwargs)
-        return super(DeviceViewSet, self).create(request, *args, **kwargs)
+            device = Device.objects.get(dev_id=serializer.data["dev_id"])
+        except Device.DoesNotExist:
+            device = Device(dev_id=serializer.data["dev_id"])
+        device.is_active = True
+        device.reg_id = serializer.data["reg_id"]
+        device.name = serializer.data.get("name") or 'device'
+        device.user = user
+        device.save()
 
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = Device.objects.get(dev_id=kwargs["pk"])
+            serializer = self.get_serializer(instance)
+            self.perform_destroy(instance)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except Device.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def update(self, request, device=None, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        if device:
-            instance = device
-        else:
-            instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()

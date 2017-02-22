@@ -107,7 +107,7 @@ class RegisterSerializer(Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoreUser
-        fields = ['pk', 'email', 'full_profile', 'point']
+        fields = ['pk', 'email', 'full_profile']
 
     def __init__(self, with_token=True, instance=None, data=empty, **kwargs):
         self.with_token = with_token
@@ -135,4 +135,4 @@ class UserPointSerializer(serializers.ModelSerializer):
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = ['user', 'gcm_key', 'enabled']
+        fields = ['dev_id','reg_id','name','is_active']

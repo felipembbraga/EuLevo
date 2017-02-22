@@ -2,12 +2,15 @@
 
 from django.contrib.gis.db import models
 from django.db.models.query_utils import Q
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 
 from core.models import CoreUser, Profile
+from core.tasks import send_multiply_messages
 import datetime
+
+from eulevo.utils import delete_deals
 
 WEIGHTS = (
     (1, '0 a 5kg'),
@@ -112,6 +115,20 @@ class Package(models.Model):
             return ProfileSerializer(self.owner.profile, many=False).data
 
 
+# def delete_deals(package):
+#     deals = package.deal_set.all()
+#     donedeals = deals.filter(donedeal__isnull=False)
+#     travel_owners = map(lambda d: d.travel.owner.pk, donedeals)
+#
+#     send_multiply_messages.delay(
+#         travel_owners,
+#         message_body="Uma encomenda para foi cancelada.".format(package.destiny_description),
+#         message_title="Encomenda cancelada"
+#     )
+#     for deal in deals:
+#         deal.delete()
+
+
 @receiver(post_save, sender=Package)
 def package_post_save(sender, instance, created, **kwargs):
     """
@@ -129,6 +146,15 @@ def package_post_save(sender, instance, created, **kwargs):
                 instance.deleted_at = None
                 instance.save()
         else:
+            deals = instance.deal_set.all()
+            user_list = map(lambda d: d.travel.owner.pk, deals.filter(donedeal__isnull=False))
+            args = {
+                'queryset': deals,
+                'user_list': user_list,
+                'title': 'Encomenda cancelada',
+                'body': u"Uma encomenda para {0} foi cancelada.".format(instance.destiny_description)
+            }
+            delete_deals(**args)
             if instance.deleted_at is None:
                 instance.deleted_at = datetime.datetime.now()
                 instance.save()
@@ -136,6 +162,11 @@ def package_post_save(sender, instance, created, **kwargs):
                 for deal in deals:
                     deal.status = 4
                     deal.save()
+
+
+
+
+
 
 class PackageImage(models.Model):
     """

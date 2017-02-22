@@ -51,6 +51,7 @@ INSTALLED_APPS = [
                      'django.contrib.staticfiles',
                      'django.contrib.gis',
                      'django_extensions',
+                     'firebasecm',
                      'guardian',
                      'rest_framework',
                      'rest_framework_gis',
@@ -201,6 +202,19 @@ DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 AZURE_ACCOUNT_NAME = "eulevostorage"
 AZURE_ACCOUNT_KEY = "dcJN48lsq1QIeF70WudWzt38Yj5tZCs6xFIUZI8xsIUnLWiYKkrGyX2+Bpkads7Dwqi1YKxkUMOlmbdjlWDHMw=="
 AZURE_CONTAINER = "eulevo"
+
+# Celery
+CELERY_BROKER_BACKEND = 'redis'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+#FCM
+FCM_APIKEY = "AAAAECQcdcw:APA91bEAQIpYN1p562e6EYckZQJttAXQyEtRZ8N0ITJfOwOwpPML159R0onyIHCX-qIMluPeUzx1r0OFM6CqbmyWRD2JTBDEaAY2PWPcHLOGtkCI-x7Z9HpnV93FgkeDZUdEIOBt8rFlGL1Dwt4nC7mCyFMAfiy13w"
+FCM_DEVICE_MODEL = 'core.Device'
 
 try:
     from local_settings import *

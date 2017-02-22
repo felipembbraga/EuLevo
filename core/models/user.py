@@ -14,6 +14,7 @@ from django.utils.six import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from rest_framework_jwt.settings import api_settings
 from guardian.shortcuts import assign_perm
+from firebasecm.models import AbstractDevice
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -251,22 +252,17 @@ class SocialLogin(models.Model):
         return SOCIAL_TYPES_DICT.get(self.social_type)
 
 
-class Device(models.Model):
+class Device(AbstractDevice):
     """
     """
     user = models.ForeignKey(CoreUser)
-    gcm_key = models.CharField(max_length=255)
-    enabled = models.BooleanField(default=True)
 
-    class Meta:
-        unique_together=('user', 'gcm_key')
 
 
 @receiver(post_save, sender=Device)
 def device_post_save(sender, instance, *args, **kwargs):
-    assign_perm('change_device', instance.user, instance)
-    if instance.enabled == True:
-        Device.objects.filter(gcm_key=instance.gcm_key, enabled=True).exclude(pk=instance.pk).update(enabled=False)
+    assign_perm('core.change_device', instance.user)
+    assign_perm('core.delete_device', instance.user)
 
 
 @python_2_unicode_compatible

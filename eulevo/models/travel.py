@@ -2,12 +2,14 @@
 import datetime
 from django.contrib.gis.db import models
 from django.db.models.query_utils import Q
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete, pre_delete
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 
 from core.models import CoreUser
+from core.tasks import send_multiply_messages
 from .package import WEIGHTS
+from eulevo.utils import delete_deals
 
 VEHICLES = (
     (1, 'Carro de passeio'),
@@ -18,6 +20,7 @@ VEHICLES = (
     (6, u'Avião'),
     (7, 'Navio')
 )
+
 
 class TravelManager(models.Manager):
     def all_actives(self):
@@ -59,13 +62,27 @@ class Travel(models.Model):
     def count_deals(self):
         return self.deal_set.filter(status=1).count()
 
-
     def get_packages(self):
         deals = self.deal_set.filter(donedeal__isnull=False)
         if deals.count() > 0:
             from eulevo.serializers import PackageSoftSerializer
             packages = [deal.package for deal in deals]
             return PackageSoftSerializer(packages, many=True).data
+        return None
+
+
+# def delete_deals(travel):
+#     deals = travel.deal_set.all()
+#     donedeals = deals.filter(donedeal__isnull=False)
+#     package_owners = map(lambda d: d.package.owner.pk, donedeals)
+#
+#     send_multiply_messages.delay(
+#         package_owners,
+#         message_body=u"A viagem para {0} foi cancelada.".format(travel.destiny_description),
+#         message_title="Viagem cancelada"
+#     )
+#     for deal in deals:
+#         deal.delete()
 
 
 @receiver(post_save, sender=Travel)
@@ -76,13 +93,21 @@ def travel_post_save(sender, instance, created, raw, using, update_fields, **kwa
             if instance.deleted_at is not None:
                 instance.deleted_at = None
                 instance.save()
+
         else:
+            deals = instance.deal_set.all()
+            user_list = map(lambda d: d.package.owner.pk, deals.filter(donedeal__isnull=False))
+            args = {
+                'queryset': deals,
+                'user_list': user_list,
+                'title': 'Viagem cancelada',
+                'body': u"A viagem para {0} foi cancelada.".format(instance.destiny_description)
+            }
+            delete_deals(**args)
             if instance.deleted_at is None:
                 instance.deleted_at = datetime.datetime.now()
                 instance.save()
                 instance.deal_set.all().update(status=4)
-
-
 
 
 class TravelHistory(models.Model):

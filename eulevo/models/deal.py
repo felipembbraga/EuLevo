@@ -82,7 +82,7 @@ def deal_post_save(sender, instance, created, **kwargs):
 
 
 class DoneDeal(models.Model):
-    deal = models.OneToOneField(Deal)
+    deal = models.OneToOneField(Deal, on_delete=models.CASCADE)
     protocol = models.CharField(max_length=15)
     token = models.CharField(max_length=10)
     delivery_at = models.DateTimeField(null=True, blank=True)

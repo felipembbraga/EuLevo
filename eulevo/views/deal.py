@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated, DjangoObjectPermissions
@@ -8,6 +10,7 @@ from eulevo.models import Deal, DoneDeal
 from eulevo.serializers import DealSerializer, DoneDealSerializer, DoneDealViewSerializer
 from eulevo.models import Package
 from eulevo.models import Travel
+from eulevo.tasks import notify_deal
 
 
 class DealViewSet(EuLevoModelViewSet):
@@ -34,9 +37,23 @@ class DealViewSet(EuLevoModelViewSet):
         if deal:
             self.deal = deal
             request.data['status'] = 1
-            return self.partial_update(request, *args, **kwargs)
+            response = self.partial_update(request, *args, **kwargs)
+            data = {
+                'type': request.user.pk == self.deal.package.owner.pk and 'travel' or 'package',
+                'id': request.user.pk == self.deal.package.owner.pk and self.deal.travel.pk or self.deal.package.pk,
+            }
 
-        return super(DealViewSet, self).create(request, *args, **kwargs)
+            notify_deal.delay(user_pk=request.user.pk, deal_pk=self.deal.pk, data_message=data)
+            return response
+        response = super(DealViewSet, self).create(request, *args, **kwargs)
+        notify_deal.delay(
+            user_pk=request.user.pk,
+            deal_pk=Deal.objects.filter(
+                package__pk=request.data.get('package'),
+                travel__pk=request.data.get('travel')
+            ).first().serializable_value('pk')
+        )
+        return response
 
 
     def get_object(self):
@@ -92,9 +109,13 @@ class DoneDealViewSet(EuLevoModelViewSet):
         self.serializer_class = DoneDealViewSerializer
         return super(DoneDealViewSet, self).list(request, *args, **kwargs)
 
-        # def create(self, request, *args, **kwargs):
-        #     try:
-        #         request.data['user'] = request.user.pk
-        #     except:
-        #         pass
-        #     return super(DoneDealViewSet, self).create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        response = super(DoneDealViewSet, self).create(request, *args, **kwargs)
+        # manda a notificação pro fcm
+        notify_deal.delay(user_pk=request.user.pk, deal_pk=request.data['deal'])
+        return response
+
+
+
+
+

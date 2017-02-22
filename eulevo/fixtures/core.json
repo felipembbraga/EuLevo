@@ -1,0 +1,460 @@
+[
+  {
+    "model": "core.coreuser",
+    "pk": 1,
+    "fields": {
+      "last_login": null,
+      "is_superuser": false,
+      "email": "AnonymousUser",
+      "password": "!kZrSdeGKvistL2eQYIcZAWFD3XW37FiV1aHyQloX",
+      "is_enabled": true,
+      "is_locked": false,
+      "is_staff": false,
+      "email_confirmated": false,
+      "token": null,
+      "created_at": "2016-12-20T15:47:01.142Z",
+      "updated_at": "2016-12-20T15:47:01.142Z",
+      "groups": [],
+      "user_permissions": [
+        64,
+        65,
+        61,
+        62,
+        40,
+        41,
+        49,
+        50,
+        58,
+        59,
+        52,
+        53,
+        46,
+        47,
+        55,
+        56,
+        43,
+        44
+      ],
+      "friends": []
+    }
+  },
+  {
+    "model": "core.coreuser",
+    "pk": 2,
+    "fields": {
+      "last_login": "2017-02-14T21:22:44.634Z",
+      "is_superuser": false,
+      "email": "felipe.mendes.braga@gmail.com",
+      "password": "pbkdf2_sha256$30000$UgbcukZ4LLwz$mkEJ6kN8Nenatg2desCOrIj7TW2tb476fHyjK2P14S4=",
+      "is_enabled": true,
+      "is_locked": false,
+      "is_staff": true,
+      "email_confirmated": false,
+      "token": null,
+      "created_at": "2016-12-20T15:47:24.488Z",
+      "updated_at": "2016-12-20T15:47:24.488Z",
+      "groups": [],
+      "user_permissions": [
+        25,
+        26,
+        27,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        31,
+        32,
+        33,
+        28,
+        29,
+        30,
+        64,
+        65,
+        61,
+        62,
+        40,
+        41,
+        49,
+        50,
+        58,
+        59,
+        52,
+        53,
+        54,
+        46,
+        47,
+        55,
+        56,
+        43,
+        44
+      ],
+      "friends": []
+    }
+  },
+  {
+    "model": "core.coreuser",
+    "pk": 3,
+    "fields": {
+      "last_login": "2017-01-30T13:17:08.967Z",
+      "is_superuser": false,
+      "email": "mendesbraga007@gmail.com",
+      "password": "pbkdf2_sha256$30000$L84RHIdBuKSn$xzkf4VT7MTtNErV6apxYMnFamByHKV0tWBr6vVd72kI=",
+      "is_enabled": true,
+      "is_locked": false,
+      "is_staff": false,
+      "email_confirmated": false,
+      "token": null,
+      "created_at": "2016-12-28T03:39:12.204Z",
+      "updated_at": "2016-12-28T03:39:12.204Z",
+      "groups": [],
+      "user_permissions": [
+        25,
+        26,
+        27,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        31,
+        32,
+        33,
+        28,
+        29,
+        30,
+        64,
+        65,
+        61,
+        62,
+        40,
+        41,
+        49,
+        50,
+        58,
+        59,
+        52,
+        53,
+        54,
+        46,
+        47,
+        55,
+        56,
+        43,
+        44
+      ],
+      "friends": []
+    }
+  },
+  {
+    "model": "core.coreuser",
+    "pk": 4,
+    "fields": {
+      "last_login": null,
+      "is_superuser": false,
+      "email": "fulano@fulano5.com.br",
+      "password": "pbkdf2_sha256$30000$RbzADvTmZ4Lr$Q2VjVKvJQESh153LULI0VMvi2isQEINT8MsSqne5uF8=",
+      "is_enabled": true,
+      "is_locked": false,
+      "is_staff": false,
+      "email_confirmated": false,
+      "token": null,
+      "created_at": "2017-01-04T19:33:36.931Z",
+      "updated_at": "2017-01-04T19:33:36.931Z",
+      "groups": [],
+      "user_permissions": [
+        25,
+        26,
+        27,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        31,
+        32,
+        33,
+        28,
+        29,
+        30,
+        64,
+        65,
+        61,
+        62,
+        40,
+        41,
+        49,
+        50,
+        58,
+        59,
+        52,
+        53,
+        46,
+        47,
+        55,
+        56,
+        43,
+        44
+      ],
+      "friends": []
+    }
+  },
+  {
+    "model": "core.coreuser",
+    "pk": 6,
+    "fields": {
+      "last_login": null,
+      "is_superuser": false,
+      "email": "rodrigoclp@gmail.com",
+      "password": "pbkdf2_sha256$30000$4eloiBMdJ3Uo$zKCu4AVI64NAqg8LLRd/EYqZBLBbHszq6minieI6bDg=",
+      "is_enabled": true,
+      "is_locked": false,
+      "is_staff": false,
+      "email_confirmated": false,
+      "token": null,
+      "created_at": "2017-02-02T18:07:21.526Z",
+      "updated_at": "2017-02-02T18:07:21.526Z",
+      "groups": [],
+      "user_permissions": [
+        25,
+        26,
+        27,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        31,
+        32,
+        33,
+        28,
+        29,
+        30,
+        64,
+        65,
+        61,
+        62,
+        40,
+        41,
+        49,
+        50,
+        58,
+        59,
+        52,
+        53,
+        54,
+        46,
+        47,
+        55,
+        56,
+        43,
+        44
+      ],
+      "friends": []
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "name": "Felipe Mendes Braga",
+      "cpf_cnpj": null,
+      "phone": "63981185797",
+      "rating": 0.0,
+      "social_image": null,
+      "image": "",
+      "created_at": "2016-12-20T16:16:50.823Z",
+      "updated_at": "2016-12-20T16:16:50.823Z"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "name": "Felipe Mendes Braga Jovem",
+      "cpf_cnpj": null,
+      "phone": "63981185797",
+      "rating": 0.0,
+      "social_image": null,
+      "image": "",
+      "created_at": "2016-12-27T21:49:07.354Z",
+      "updated_at": "2016-12-27T21:49:07.354Z"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "name": "Felipe Braga",
+      "cpf_cnpj": null,
+      "phone": "11244244444",
+      "rating": 0.0,
+      "social_image": null,
+      "image": "",
+      "created_at": "2016-12-28T03:39:12.285Z",
+      "updated_at": "2016-12-28T03:39:12.285Z"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "name": "Fulano",
+      "cpf_cnpj": null,
+      "phone": "63981185797",
+      "rating": 0.0,
+      "social_image": null,
+      "image": "",
+      "created_at": "2017-01-04T19:33:37.024Z",
+      "updated_at": "2017-01-04T20:25:50.969Z"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "name": "Rodrigo P\u00e1dua",
+      "cpf_cnpj": null,
+      "phone": "63981179217",
+      "rating": 0.0,
+      "social_image": null,
+      "image": "",
+      "created_at": "2017-02-02T18:07:21.641Z",
+      "updated_at": "2017-02-02T18:07:21.641Z"
+    }
+  },
+  {
+    "model": "core.sociallogin",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "social_type": 1,
+      "key": "115938855395159057633"
+    }
+  },
+  {
+    "model": "core.sociallogin",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "social_type": 2,
+      "key": "1143287075697148"
+    }
+  },
+  {
+    "model": "core.sociallogin",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "social_type": 1,
+      "key": "114188994282483118790"
+    }
+  },
+  {
+    "model": "core.sociallogin",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "social_type": 1,
+      "key": "15000"
+    }
+  },
+  {
+    "model": "core.sociallogin",
+    "pk": 7,
+    "fields": {
+      "user": 4,
+      "social_type": 2,
+      "key": "123"
+    }
+  },
+  {
+    "model": "core.device",
+    "pk": 11,
+    "fields": {
+      "dev_id": "7f8d50f02e1c3f9f",
+      "reg_id": "dJLlB7GgHdk:APA91bF8UxG7rBs9a7LKNxlFasakPfmP_lqhPdk8MeM4GRkY7SuuGkjCgD94taNOmN08dKxKmnHUH_0i91ltSPkAojQr69urIDnSlSwrT2zAiUAmGMXnlfo2LUR5LvOpqHtAfYn6_b_A",
+      "name": "device",
+      "is_active": true,
+      "user": 2
+    }
+  },
+  {
+    "model": "core.device",
+    "pk": 12,
+    "fields": {
+      "dev_id": "83dea90cfe2651f7",
+      "reg_id": "f0N5jsEx5-o:APA91bF0zWSxPjt1Egz4LVq9DCslOIsFopgVP4zOrYGPYxZa7tBpshIZAKHFxr8zXOzriPL4i5sq6VQQekeYFN_eRDr2VWD94pO0m72gvxUOvOrqgZCee0UXjoxwbxycaolQ_o0mYGp0",
+      "name": "device",
+      "is_active": true,
+      "user": 3
+    }
+  },
+  {
+    "model": "core.device",
+    "pk": 13,
+    "fields": {
+      "dev_id": "36e89e5aef4ffb6d",
+      "reg_id": "d332n2xu88U:APA91bF-_HMaIMr2bIXQXEVqACaRY3Im0szkCXkM2XS4CkXMKckTv0eUXUzGmakaYukfUV1EoT6YmzLDJdhKFzzLSXJZSnZG_R1m-P8le5DRZ-4f8TyuVpb4nQEwIX4HAI6A_miArZXz",
+      "name": "device",
+      "is_active": true,
+      "user": 3
+    }
+  },
+  {
+    "model": "core.device",
+    "pk": 14,
+    "fields": {
+      "dev_id": "57fb62b195d551fd",
+      "reg_id": "dOWtNg7O5x8:APA91bHuPCV5UOiJYDMlbqe84amN6jLd5Jb773bhwoZiPaWhfwt1_LDdRaJGfODU18oQxix1nZbMbXyPnk9Mb02Jl-zYYSjfYAC1svGS0FOPvmj4DYGOCp-eqs3fTJei_EK-COBYRWfA",
+      "name": "device",
+      "is_active": true,
+      "user": 2
+    }
+  },
+  {
+    "model": "core.userpoint",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "point": "SRID=4326;POINT (-10.1834667 -48.3403665)",
+      "updated_at": "2017-02-15T21:01:26.569Z"
+    }
+  },
+  {
+    "model": "core.userpoint",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "point": "SRID=4326;POINT (37.42199833333333 -122.084)",
+      "updated_at": "2017-02-15T20:33:53.370Z"
+    }
+  },
+  {
+    "model": "core.userpoint",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "point": "SRID=4326;POINT (-10.1830097 -48.3409896)",
+      "updated_at": "2017-01-04T20:25:53.450Z"
+    }
+  },
+  {
+    "model": "core.userpoint",
+    "pk": 4,
+    "fields": {
+      "user": 6,
+      "point": "SRID=4326;POINT (-10.1821149 -48.3365498)",
+      "updated_at": "2017-02-02T20:56:47.220Z"
+    }
+  }
+]
