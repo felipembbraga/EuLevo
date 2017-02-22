@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated, DjangoObjectPermissions
 from rest_framework.response import Response
+from rest_framework import status
 
 from EuLevo.utils.viewset import EuLevoModelViewSet
 from eulevo.models import Deal, DoneDeal
-from eulevo.serializers import DealSerializer, DoneDealSerializer, DoneDealViewSerializer
 from eulevo.models import Package
 from eulevo.models import Travel
+from eulevo.serializers import DealSerializer, DoneDealSerializer, DoneDealViewSerializer
 from eulevo.tasks import notify_deal
 
 
@@ -18,7 +20,7 @@ class DealViewSet(EuLevoModelViewSet):
     serializer_class = DealSerializer
     permission_classes = (
         IsAuthenticated,
-        DjangoObjectPermissions,
+        DjangoObjectPermissions
     )
 
     http_method_names = ['get', 'post', 'patch']
@@ -54,7 +56,6 @@ class DealViewSet(EuLevoModelViewSet):
             ).first().serializable_value('pk')
         )
         return response
-
 
     def get_object(self):
         if hasattr(self, 'deal'):
@@ -105,17 +106,28 @@ class DoneDealViewSet(EuLevoModelViewSet):
 
     http_method_names = ['get', 'post']
 
+    def check_deal(self, request):
+        try:
+            deal = Deal.objects.get(pk=request.data.get('deal'))
+            if deal.status is not 1:
+                return False
+            return True
+        except Deal.DoesNotExist:
+            return False
+
     def list(self, request, *args, **kwargs):
         self.serializer_class = DoneDealViewSerializer
         return super(DoneDealViewSet, self).list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
+        if not self.check_deal(request):
+            import json
+            data = {
+                'error': True,
+                'message': 'Deal not available'
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
         response = super(DoneDealViewSet, self).create(request, *args, **kwargs)
         # manda a notificação pro fcm
         notify_deal.delay(user_pk=request.user.pk, deal_pk=request.data['deal'])
         return response
-
-
-
-
-

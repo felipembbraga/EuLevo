@@ -3,6 +3,10 @@ from eulevo.models import Deal, DoneDeal
 
 
 class DealSerializer(serializers.ModelSerializer):
+
+    def is_valid(self, raise_exception=False):
+        return super(DealSerializer, self).is_valid(raise_exception)
+
     class Meta:
         model = Deal
         fields = [
