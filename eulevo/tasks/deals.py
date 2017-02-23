@@ -51,22 +51,16 @@ def get_message(type, status, data):
 
 
 def mount_message(deal, user, *args, **kwargs):
-    print u"Usuário", user.email
     package, travel = deal.package, deal.travel
-    print 'usuário remetente:', user.pk == package.owner.pk
     if user.pk == package.owner.pk:
         target, type, data = travel.owner, 'travel', travel.destiny_description
     else:
         target, type, data = package.owner, 'package', package.description
-    print "target",target
-    print "tipo", type
-    print "status", deal.status
-    print "data", data
+
     try:
         message = get_message(type, deal.status, data)
     except KeyError, e:
         return
-    print message
     kwargs.update(message)
     devices = Device.objects.filter(user=target, is_active=True)
     print devices.send_message(*args, **kwargs)
@@ -76,9 +70,7 @@ def mount_message(deal, user, *args, **kwargs):
 
 @shared_task
 def notify_deal(deal_pk, user_pk, *args, **kwargs):
-    print 'deal_id: ' + str(deal_pk)
     deal = Deal.objects.get(pk=deal_pk)
     sender = CoreUser.objects.get(pk=user_pk)
-    print('notificando o dispositivo')
     return mount_message(deal, sender, *args, **kwargs)
 
